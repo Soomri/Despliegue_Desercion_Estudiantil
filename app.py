@@ -255,6 +255,8 @@ if submitted:
     
     # Hacer la predicción
     try:
+        input_df = input_df.astype(np.float32)
+
         prediction_proba = pipeline.predict_proba(input_df)[0][1]  # Probabilidad de deserción
         prediction_percent = round(prediction_proba * 100, 2)
         
