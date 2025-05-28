@@ -36,6 +36,10 @@ if pipeline is not None:
     except Exception as e:
         st.error(f"Error al inspeccionar el preprocesador: {e}")
 
+classifier = pipeline.named_steps['classifier']
+st.write(f"Step: classifier, Tipo de objeto: {type(classifier)}")
+
+
 
 if pipeline is None:
     st.stop()
