@@ -27,6 +27,15 @@ pipeline, columnas_esperadas = load_model()
 
 # Justo después de cargar el modelo
 st.write(f"Tipo de pipeline cargado: {type(pipeline)}")
+if pipeline is not None:
+    st.write("📌 Revisión del preprocesador:")
+    try:
+        preprocessor = pipeline.named_steps['preprocessor']
+        for name, transformer, cols in preprocessor.transformers:
+            st.write(f"Step: {name}, Tipo de objeto: {type(transformer)}")
+    except Exception as e:
+        st.error(f"Error al inspeccionar el preprocesador: {e}")
+
 
 if pipeline is None:
     st.stop()
