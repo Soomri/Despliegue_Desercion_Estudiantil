@@ -5,4 +5,4 @@ scikit-learn==1.1.3
 xgboost==3.0.2
 joblib==1.5.0
 dill==0.3.8
-imbalanced-learn
+imbalanced-learn==0.9.1
