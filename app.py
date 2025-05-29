@@ -21,8 +21,8 @@ st.set_page_config(
 def load_model():
     try:
         # Intentar cargar el pipeline completo
-        if os.path.exists('pipeline_final_desercion.pkl'):
-            model = joblib.load('pipeline_final_desercion.pkl')
+        if os.path.exists('pipeline_final_desercion1.pkl'):
+            model = joblib.load('pipeline_final_desercion1.pkl')
             st.success("✅ Modelo cargado exitosamente")
             return model, "pipeline"
         else:
