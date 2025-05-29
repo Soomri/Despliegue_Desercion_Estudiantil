@@ -60,11 +60,12 @@ def prepare_input_data(input_dict):
     except Exception as e:
         st.error(f"Error al preparar los datos: {str(e)}")
         return None
-
+    
 def convert_data_types(df):
     """
     Convierte los tipos de datos según las especificaciones del modelo
     """
+
     # Variables enteras
     variables_int = [
         'Application order', 'Daytime/evening attendance', 'Displaced',
@@ -83,27 +84,46 @@ def convert_data_types(df):
         'Inflation rate', 'GDP'
     ]
     
-    # Convertir tipos
+    # Variables adicionales que se pasan como passthrough y deben ser enteras (dummies)
+    variables_passthrough = [
+        'Marital status_Divorced', 'Marital status_FactoUnion', 'Marital status_Separated', 'Marital status_Single',
+        'Application mode_Admisión Especial', 'Application mode_Admisión Regular', 'Application mode_Admisión por Ordenanza',
+        'Application mode_Cambios/Transferencias', 'Application mode_Estudiantes Internacionales', 'Application mode_Mayores de 23 años',
+        'Course_Agricultural & Environmental Sciences', 'Course_Arts & Design', 'Course_Business & Management',
+        'Course_Communication & Media', 'Course_Education', 'Course_Engineering & Technology', 'Course_Health Sciences',
+        'Course_Social Sciences', 'Previous qualification_Higher Education', 'Previous qualification_Other',
+        'Previous qualification_Secondary Education', 'Previous qualification_Technical Education', 'Nacionality_Colombian',
+        'Nacionality_Cuban', 'Nacionality_Dutch', 'Nacionality_English', 'Nacionality_German', 'Nacionality_Italian',
+        'Nacionality_Lithuanian', 'Nacionality_Moldovan', 'Nacionality_Mozambican', 'Nacionality_Portuguese',
+        'Nacionality_Romanian', 'Nacionality_Santomean', 'Nacionality_Turkish',
+        "Mother's qualification_Basic_or_Secondary", "Mother's qualification_Other_or_Unknown",
+        "Mother's qualification_Postgraduate", "Mother's qualification_Technical_Education",
+        "Father's qualification_Basic_or_Secondary", "Father's qualification_Other_or_Unknown",
+        "Father's qualification_Postgraduate", "Mother's occupation_Administrative/Clerical",
+        "Mother's occupation_Skilled Manual Workers", "Mother's occupation_Special Cases",
+        "Mother's occupation_Technicians/Associate Professionals", "Mother's occupation_Unskilled Workers",
+        "Father's occupation_Administrative/Clerical", "Father's occupation_Professionals",
+        "Father's occupation_Skilled Manual Workers", "Father's occupation_Special Cases",
+        "Father's occupation_Technicians/Associate Professionals"
+    ]
+
+    # Convertir variables enteras
     for col in variables_int:
         if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce').astype('int64')
-    
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype('int64')
+
+    # Convertir variables flotantes
     for col in variables_float:
         if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce').astype('float64')
-    
-    # Variables booleanas (ya están como 0/1)
-    variables_bool = [col for col in df.columns if any(prefix in col for prefix in [
-        'Marital status_', 'Application mode_', 'Course_', 'Previous qualification_',
-        'Nacionality_', "Mother's qualification_", "Father's qualification_",
-        "Mother's occupation_", "Father's occupation_"
-    ])]
-    
-    for col in variables_bool:
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0.0).astype('float64')
+
+    # Convertir variables passthrough (dummies) a int
+    for col in variables_passthrough:
         if col in df.columns:
-            df[col] = df[col].astype('int64')
-    
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype('int64')
+
     return df
+
 
 def get_expected_columns():
     """
